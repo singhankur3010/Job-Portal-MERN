@@ -2,18 +2,15 @@
 const jwt = require('jsonwebtoken');
 const Admin = require('../Admin/model');
 const Company = require('../Company/model');
-
 const isAdmin = async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
   
   if (!token) {
     return res.status(401).json({ message: 'Authorization token is required' });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    const admin = await Admin.findByPk(decoded.id); 
+   const admin = await Admin.findByPk(decoded.id); 
 
     if (!admin) {
       return res.status(403).json({ message: 'Access denied, Admin role required' });
